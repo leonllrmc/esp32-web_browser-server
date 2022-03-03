@@ -36,4 +36,4 @@ def get_screenshot(url):
     driver.quit()
     return f'tmp-{t}.png'
 
-app.run(host='0.0.0.0', port=8080)
+app.run(host='0.0.0.0', port=80)
