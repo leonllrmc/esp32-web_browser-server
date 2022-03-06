@@ -15,7 +15,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/screen', async function(req, res) {
     try {
-        const frameBuffer = Array(128).fill(Array(160).fill(Array(3).fill(0)))
+        const frameBuffer = Array(128);
+        for(let y = 0;y < 160; y++) {
+            frameBuffer[y] = Array(160);
+        }
         const id = Date.now() + "-" + Math.random().toString(36).substring(2, 5);
         const browser = await puppeteer.launch({
             headless: true,
@@ -35,19 +38,18 @@ app.get('/screen', async function(req, res) {
         await browser.close();
 
         const img = await Jimp.read('./tmp/' + id + '.png');
-        img.resize(128, 160).scan(0, 0, img.bitmap.width, img.bitmap.height, function (x, y, idx) {
+        img.resize(128, 160).scan(0, 0, 128, 160, function (x, y, idx) {
             // x, y is the position of this pixel on the image
             // idx is the position start position of this rgba tuple in the bitmap Buffer
             // this is the image
 
-            var red = this.bitmap.data[idx + 0];
-            var green = this.bitmap.data[idx + 1];
-            var blue = this.bitmap.data[idx + 2];
-            var alpha = this.bitmap.data[idx + 3];
+            let red = this.bitmap.data[idx + 0];
+            let green = this.bitmap.data[idx + 1];
+            let blue = this.bitmap.data[idx + 2];
+            let alpha = this.bitmap.data[idx + 3];
 
-            frameBuffer[x][y][0] = red;
-            frameBuffer[x][y][0] = green;
-            frameBuffer[x][y][0] = blue;
+            frameBuffer[x][y] = [red, green, blue];
+            // console.log(frameBuffer[x][y], frameBuffer[5][5])
             // console.log(red, green, blue)
             // rgba values run from 0 - 255
             // e.g. this.bitmap.data[idx] = 0; // removes red from this pixel
