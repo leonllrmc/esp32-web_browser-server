@@ -29,15 +29,13 @@ app.get('/screen', async function(req, res) {
         await page.goto(req.query.url.toString());
         await page.waitForSelector('body', {
             visible: true
-        })
-        await page.waitForNetworkIdle()
-        await page.waitForTimeout(500)
-        await page.screenshot({
-            path: process.cwd() + '/tmp/' + id + '.png'
-        })
+        });
+        await page.waitForNetworkIdle();
+        await page.waitForTimeout(500);
+        const img_buf = await page.screenshot();
         await browser.close();
 
-        const img = await Jimp.read(process.cwd() + '/tmp/' + id + '.png');
+        const img = await Jimp.read(img_buf);
         img.resize(128, 160).scan(0, 0, 128, 160, function (x, y, idx) {
             // x, y is the position of this pixel on the image
             // idx is the position start position of this rgba tuple in the bitmap Buffer
