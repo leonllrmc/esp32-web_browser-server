@@ -52,7 +52,6 @@ app.get('/screen', async function(req, res) {
             // rgba values run from 0 - 255
             // e.g. this.bitmap.data[idx] = 0; // removes red from this pixel
         });
-        fs.rmSync('./tmp/' + id + '.png')
         res.json(frameBuffer)
     } catch (e) {
         res.status(500).send('Internal Server Error: ' + e.message)
