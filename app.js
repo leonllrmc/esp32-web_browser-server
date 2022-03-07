@@ -37,7 +37,7 @@ app.get('/screen', async function(req, res) {
         })
         await browser.close();
 
-        const img = await Jimp.read('./tmp/' + id + '.png');
+        const img = await Jimp.read(process.cwd() + '/tmp/' + id + '.png');
         img.resize(128, 160).scan(0, 0, 128, 160, function (x, y, idx) {
             // x, y is the position of this pixel on the image
             // idx is the position start position of this rgba tuple in the bitmap Buffer
