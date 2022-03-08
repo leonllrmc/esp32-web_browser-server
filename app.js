@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/screen', async function(req, res) {
     try {
-        let frameBuffer = "";
+        let frameBuffer = "@";
         const id = Date.now() + "-" + Math.random().toString(36).substring(2, 5);
         const browser = await puppeteer.launch({
             headless: true,
