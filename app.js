@@ -15,10 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/screen', async function(req, res) {
     try {
-        const frameBuffer = Array(128);
-        for(let y = 0;y < 160; y++) {
-            frameBuffer[y] = Array(160);
-        }
+        let frameBuffer = "";
         const id = Date.now() + "-" + Math.random().toString(36).substring(2, 5);
         const browser = await puppeteer.launch({
             headless: true,
@@ -46,13 +43,13 @@ app.get('/screen', async function(req, res) {
             let blue = this.bitmap.data[idx + 2];
             let alpha = this.bitmap.data[idx + 3];
 
-            frameBuffer[x][y] = [red, green, blue];
+            frameBuffer += parseInt(red, 10).toString(16) + parseInt(green, 10).toString(16) + parseInt(blue, 10).toString(16);
             // console.log(frameBuffer[x][y], frameBuffer[5][5])
             // console.log(red, green, blue)
             // rgba values run from 0 - 255
             // e.g. this.bitmap.data[idx] = 0; // removes red from this pixel
         });
-        res.json(frameBuffer)
+        res.send(frameBuffer.toUpperCase())
     } catch (e) {
         res.status(500).send('Internal Server Error: ' + e.message)
     }
