@@ -12,20 +12,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var browser;
-
-(async () => {
-browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox']
-});
-})();
-
 
 app.get('/screen', async function(req, res) {
     try {
         let frameBuffer = "@";
         const id = Date.now() + "-" + Math.random().toString(36).substring(2, 5);
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox']
+        });
         const page = await browser.newPage();
         await page.setDefaultNavigationTimeout(0);
         await page.emulate(puppeteer.devices['Galaxy Note 3'])
