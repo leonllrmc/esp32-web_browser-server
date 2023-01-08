@@ -12,8 +12,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var browser;
+
 (async () => {
-const browser = await puppeteer.launch({
+browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox']
 });
