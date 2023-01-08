@@ -12,10 +12,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+(() => {
 const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox']
 });
+})();
 
 
 app.get('/screen', async function(req, res) {
