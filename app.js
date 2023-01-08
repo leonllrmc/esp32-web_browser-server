@@ -12,15 +12,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox']
+});
+
 
 app.get('/screen', async function(req, res) {
     try {
         let frameBuffer = "@";
         const id = Date.now() + "-" + Math.random().toString(36).substring(2, 5);
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: ['--no-sandbox']
-        });
         const page = await browser.newPage();
         await page.setDefaultNavigationTimeout(0);
         await page.emulate(puppeteer.devices['Galaxy Note 3'])
@@ -31,7 +32,7 @@ app.get('/screen', async function(req, res) {
         await page.waitForNetworkIdle();
         await page.waitForTimeout(500);
         const img_buf = await page.screenshot();
-        await browser.close();
+        await page.close();
 
         const img = await Jimp.read(img_buf);
         img.cover(256+128, 320+160).resize(128, 160).scan(0, 0, 128, 160, function (x, y, idx) {
