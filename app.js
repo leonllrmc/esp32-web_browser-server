@@ -22,6 +22,7 @@ app.get('/screen', async function(req, res) {
             args: ['--no-sandbox']
         });
         const page = await browser.newPage();
+        await page.setDefaultNavigationTimeout(0);
         await page.emulate(puppeteer.devices['Galaxy Note 3'])
         await page.goto(req.query.url.toString());
         await page.waitForSelector('body', {
